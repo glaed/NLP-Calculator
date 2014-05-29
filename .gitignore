@@ -1,4 +1,5 @@
 target/*
 .idea/*
-mySearchEngine.iml
+out/*
+NLP-CalculationProject.iml
 
