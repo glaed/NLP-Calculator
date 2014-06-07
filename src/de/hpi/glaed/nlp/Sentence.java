@@ -1,16 +1,21 @@
 package de.hpi.glaed.nlp;
 
+import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Dustin on 29.05.2014.
- */
 public class Sentence {
-    private List<Token> token;
+    private List<Token> tokenList;
 
-    public Sentence() { }
+    public Sentence() {
+        tokenList = new ArrayList<Token>();
+    }
 
     public void add(Token token){
-        this.token.add(token);
+        this.tokenList.add(token);
+    }
+
+    @Override
+    public String toString(){
+        return tokenList.toString();
     }
 }

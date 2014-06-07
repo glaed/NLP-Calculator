@@ -4,13 +4,8 @@ import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.XMLEvent;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 
-/**
- * Created by Dustin on 29.05.2014.
- */
 public class DocumentParser{
 
     XMLEventReader eventReader;
@@ -20,11 +15,46 @@ public class DocumentParser{
         XMLInputFactory inputFactory = XMLInputFactory.newInstance();
         // set isCoalescing so we get complete contents of text tag
         inputFactory.setProperty("javax.xml.stream.isCoalescing", true);
-        //InputStream in = filename.openStream();
 
         InputStream in = new FileInputStream(filePath);
 
         eventReader = inputFactory.createXMLEventReader(in);
+    }
+
+    public void splitDocumentCollection(String directory){
+
+        FilenameFilter xmlFilter = createXMLFilter();
+        File[] files = new File(directory).listFiles(xmlFilter);
+
+        int testSetSize = files.length / 10;
+        int trainingSetSize = files.length - testSetSize;
+
+        File[] testSet = new File[testSetSize];
+        File[] trainingSet = new File[trainingSetSize];
+
+        System.out.println(files.length);
+        System.out.println(testSetSize);
+        System.out.println(trainingSetSize);
+
+        //Collections.shuffle(Arrays.asList(files)); //todo: test calculation with randomized sets
+
+        for(int i=0; i<testSetSize; i++){
+            testSet[i] = files[i];
+        }
+        for(int i=0; i<trainingSetSize; i++){
+            trainingSet[i] = files[i+testSetSize];
+        }
+        System.out.println(testSet[testSetSize-1]);
+        System.out.println(trainingSet[trainingSetSize-1]);
+    }
+
+    private FilenameFilter createXMLFilter() {
+        return new FilenameFilter(){
+            @Override
+            public boolean accept(File dir, String name){
+                return name.endsWith(".xml");
+            };
+        };
     }
 
     public Document parseDocument(String filePath) throws IOException, XMLStreamException {
@@ -33,25 +63,57 @@ public class DocumentParser{
         Document doc = new Document();
         while(eventReader.hasNext()){
             XMLEvent event = eventReader.nextEvent();
-            event.toString();
+
             if (event.isStartElement()) {
                 if(event.asStartElement().getName().getLocalPart().equals("sentence")){
                     System.out.println(event.asStartElement().getName().getLocalPart());
 
-                    //parseSentence();
+                    parseSentence();
                 }
-            }
-            if (event.isCharacters()) {
-                System.out.println(event.asCharacters().getData());
             }
         }
         return doc;
     }
 
-    private void parseSentence() {
+    private Sentence parseSentence() throws XMLStreamException {
+        Sentence sentence = new Sentence();
+
         while(eventReader.hasNext()){
+            XMLEvent event = eventReader.nextEvent();
+
+            if (event.isStartElement()){
+                if (event.asStartElement().getName().getLocalPart().equals("tok")){
+                    sentence.add(parseToken());
+                }
+            }
+            if (event.isEndElement()){
+                if (event.asEndElement().getName().getLocalPart().equals("sentence")){
+                    System.out.println(sentence);
+                    break;
+                }
+            }
 
         }
+        return sentence;
+    }
 
+    private Token parseToken() throws XMLStreamException {
+        String name = "<tokenName>";
+        String posTag = "<posTag>";
+
+        //todo: add posTag from attribute
+        while(eventReader.hasNext()) {
+            XMLEvent event = eventReader.nextEvent();
+
+            if (event.isCharacters()){
+                name = event.asCharacters().getData();
+            }
+            if (event.isEndElement()) {
+                if (event.asEndElement().getName().getLocalPart().equals("tok")) {
+                    break;
+                }
+            }
+        }
+        return new Token(name, posTag);
     }
 }

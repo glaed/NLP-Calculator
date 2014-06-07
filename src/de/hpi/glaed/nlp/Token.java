@@ -1,14 +1,17 @@
 package de.hpi.glaed.nlp;
 
-/**
- * Created by Dustin on 29.05.2014.
- */
 public class Token {
-    String name;
+    String tokenName;
     String posTag;
 
    public Token(String name, String posTag){
-       this.name = name;
+       this.tokenName = name;
        this.posTag = posTag;
+   }
+
+   @Override
+   public String toString(){
+       return "Token{{%s, %s}}".format(tokenName, posTag);
+       //return tokenName + " " + posTag; //gives unaltered input
    }
 }
