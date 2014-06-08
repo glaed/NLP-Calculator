@@ -9,6 +9,11 @@ import java.io.*;
 public class DocumentParser{
 
     XMLEventReader eventReader;
+    ParserConfig config;
+
+    public DocumentParser(){
+        this.config = new ParserConfig();
+    }
 
     private void openStream(String filePath) throws XMLStreamException, IOException {
         System.out.println("Open stream: %s".format(filePath));
@@ -25,27 +30,25 @@ public class DocumentParser{
 
         FilenameFilter xmlFilter = createXMLFilter();
         File[] files = new File(directory).listFiles(xmlFilter);
+        //config.setCollectionSize(files.length);
 
-        int testSetSize = files.length / 10;
-        int trainingSetSize = files.length - testSetSize;
-
-        File[] testSet = new File[testSetSize];
-        File[] trainingSet = new File[trainingSetSize];
+        File[] testSet = new File[config.getTestSetSize()];
+        File[] trainingSet = new File[config.getTrainingSetSize()];
 
         System.out.println(files.length);
-        System.out.println(testSetSize);
-        System.out.println(trainingSetSize);
+        System.out.println(config.getTestSetSize());
+        System.out.println(config.getTrainingSetSize());
 
         //Collections.shuffle(Arrays.asList(files)); //todo: test calculation with randomized sets
 
-        for(int i=0; i<testSetSize; i++){
+        for(int i=0; i<config.getTestSetSize(); i++){
             testSet[i] = files[i];
         }
-        for(int i=0; i<trainingSetSize; i++){
-            trainingSet[i] = files[i+testSetSize];
+        for(int i=0; i<config.getTrainingSetSize(); i++){
+            trainingSet[i] = files[i+config.getTestSetSize()];
         }
-        System.out.println(testSet[testSetSize-1]);
-        System.out.println(trainingSet[trainingSetSize-1]);
+        System.out.println(testSet[config.getTestSetSize()-1]);
+        System.out.println(trainingSet[config.getTrainingSetSize()-1]);
     }
 
     private FilenameFilter createXMLFilter() {
