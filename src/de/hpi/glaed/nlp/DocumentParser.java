@@ -30,7 +30,7 @@ public class DocumentParser{
 
         FilenameFilter xmlFilter = createXMLFilter();
         File[] files = new File(directory).listFiles(xmlFilter);
-        //config.setCollectionSize(files.length);
+        config.setCollectionSize(files.length);
 
         File[] testSet = new File[config.getTestSetSize()];
         File[] trainingSet = new File[config.getTrainingSetSize()];
