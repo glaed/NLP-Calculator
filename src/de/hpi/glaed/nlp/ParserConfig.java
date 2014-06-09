@@ -31,7 +31,7 @@ public class ParserConfig {
 
     private void assertCollectionSizeSet() {
         if (_collectionSize == -1){
-            System.err.println("Collection size must be configured first");
+            System.err.println("Collection size must be configured first.");
             Thread.dumpStack();
             System.exit(-1);
         }
