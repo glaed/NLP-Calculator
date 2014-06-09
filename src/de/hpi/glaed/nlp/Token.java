@@ -11,10 +11,7 @@ public class Token {
 
    @Override
    public String toString(){
-       if(tokenName.equals("%")){
-           tokenName = "<percentage>";
-       }
-       return "Token{{%s, %s}}".format(tokenName, posTag);
-       //return tokenName + " " + posTag; //gives unaltered input
+       return tokenName;
+       //return String.format("Token[%s, %s]", tokenName, posTag);
    }
 }

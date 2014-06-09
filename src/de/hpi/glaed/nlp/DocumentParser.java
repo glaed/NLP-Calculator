@@ -21,7 +21,7 @@ public class DocumentParser{
     }
 
     private void openStream(String filePath) throws XMLStreamException, IOException {
-        //System.out.println("Open stream: %s".format(filePath));
+        //System.out.println(String.format("Open stream: %s", filePath));
         XMLInputFactory inputFactory = XMLInputFactory.newInstance();
         // set isCoalescing so we get complete contents of text tag
         inputFactory.setProperty("javax.xml.stream.isCoalescing", true);
@@ -106,7 +106,7 @@ public class DocumentParser{
             if (event.isEndElement()){
                 if (event.asEndElement().getName().getLocalPart().equals("sentence")){
 
-                    System.out.println(sentence);
+                    //System.out.println(sentence);
                     break;
                 }
             }
