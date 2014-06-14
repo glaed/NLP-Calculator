@@ -1,8 +1,6 @@
 package de.hpi.glaed.nlp;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class LanguageModel {
 
@@ -42,8 +40,22 @@ public class LanguageModel {
     }
 
     public void printProbabilities(){
-        for(Map.Entry entry : probabilities.entrySet()){
+        for(Map.Entry entry : sortProbabilitiesByCount(probabilities).entrySet()){
             System.out.println(entry.getValue() + " " + entry.getKey());
         }
+    }
+
+    private Map<Bigram, Integer> sortProbabilitiesByCount(Map<Bigram, Integer> map){
+        List<Map.Entry<Bigram, Integer>> entries = new ArrayList<Map.Entry<Bigram, Integer>>(map.entrySet());
+        Collections.sort(entries, new Comparator<Map.Entry<Bigram, Integer>>() {
+            public int compare(Map.Entry<Bigram, Integer> a, Map.Entry<Bigram, Integer> b) {
+                return a.getValue().compareTo(b.getValue());
+            }
+        });
+        Map<Bigram, Integer> sortedMap = new LinkedHashMap<Bigram, Integer>();
+        for (Map.Entry<Bigram, Integer> entry : entries) {
+            sortedMap.put(entry.getKey(), entry.getValue());
+        }
+        return sortedMap;
     }
 }
