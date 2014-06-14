@@ -10,31 +10,14 @@ public class PerplexityCalculator {
         String collectionPath = "E:\\Data\\2014_NLP\\GENIA_treebank_v1\\";
         //String collectionPath = "E:\\Data\\2014_NLP\\SingleDocumentCorpus\\";
 
-        List<Document> trainingCorpus = parseTrainingSet(collectionPath);
+        PerplexityCalculation calc = new PerplexityCalculation();
+        calc.parseTestAndTrainingSet(collectionPath);
 
         LanguageModel lm = new LanguageModel();
-        lm.buildLanguageModel(trainingCorpus);
+        lm.buildLanguageModel(calc.trainingCorpus);
 
         lm.printBigramOccurrences();
     }
 
-    private static List<Document> parseTrainingSet(String collectionPath) {
-        DocumentParser parser = new DocumentParser();
-        parser.splitDocumentCollection(collectionPath);
 
-        List<Document> documentCollection = new ArrayList<Document>();
-
-        long start = System.currentTimeMillis();
-        try {
-            documentCollection = parser.parseDocuments(parser.currentTrainingSet);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (XMLStreamException e) {
-            e.printStackTrace();
-        }
-        long time = System.currentTimeMillis() - start;
-        System.out.println("parse time: " + time);
-
-        return documentCollection;
-    }
 }
