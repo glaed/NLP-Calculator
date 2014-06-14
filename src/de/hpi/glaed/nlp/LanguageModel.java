@@ -35,25 +35,11 @@ public class LanguageModel {
 
         int count = bigramOccurrences.getOrDefault(bigram, 0);
         bigramOccurrences.put(bigram, count + 1);
-
-        /*Integer count = bigramOccurrences.get(bigram);
-        if (count != null) {
-            bigramOccurrences.put(bigram, count + 1);
-        } else {
-            bigramOccurrences.put(bigram, 1);
-        }*/
     }
 
     private void addUnigramOccurrence(String word) {
         int count = unigramOccurrences.getOrDefault(word, 0);
         unigramOccurrences.put(word, count + 1);
-
-        /*Integer count = unigramOccurrences.get(word);
-        if (count != null) {
-            unigramOccurrences.put(word, count + 1);
-        } else {
-            unigramOccurrences.put(word, 1);
-        }*/
     }
 
     public double getBigramProbability(Bigram bigram){
