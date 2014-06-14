@@ -42,11 +42,30 @@ public class LanguageModel {
         unigramOccurrences.put(word, count + 1);
     }
 
-    public double getBigramProbability(Bigram bigram){
+    private double getSentenceProbability(Sentence sentence){
+        double probability = 1.0;
+
+        String lastWord = "<START>";
+        String currentWord = "";
+
+        for (Token token : sentence.getTokenList()){
+            currentWord = token.tokenName;
+            probability *= getBigramProbability(new Bigram(lastWord, currentWord));
+
+            lastWord = currentWord;
+        }
+        probability *= getBigramProbability(new Bigram(lastWord, "<STOP>"));
+        assert(probability > 0);
+
+        return probability;
+    }
+
+    private double getBigramProbability(Bigram bigram){
         double bigramCount = bigramOccurrences.getOrDefault(bigram, 0);
         double baseCount = unigramOccurrences.getOrDefault(bigram.getFirst(), 0);
 
         double probability = (bigramCount + 1) / (baseCount + unigramOccurrences.size());
+        assert(probability > 0);
 
         return probability;
     }

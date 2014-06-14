@@ -10,6 +10,7 @@ public class Sentence {
         tokenList = new ArrayList<Token>();
     }
 
+    //todo: automatically put START and STOP symbols to each sentence
     public void add(Token token){
         this.tokenList.add(token);
     }
