@@ -7,15 +7,15 @@ import java.util.List;
 
 public class PerplexityCalculator {
     public static void main(String[] args){
-        //String collectionPath = "E:\\Data\\2014_NLP\\GENIA_treebank_v1\\";
-        String collectionPath = "E:\\Data\\2014_NLP\\SingleDocumentCorpus\\";
+        String collectionPath = "E:\\Data\\2014_NLP\\GENIA_treebank_v1\\";
+        //String collectionPath = "E:\\Data\\2014_NLP\\SingleDocumentCorpus\\";
 
         List<Document> trainingCorpus = parseTrainingSet(collectionPath);
 
         LanguageModel lm = new LanguageModel();
         lm.buildLanguageModel(trainingCorpus);
 
-        lm.printProbabilities();
+        lm.printBigramOccurrences();
     }
 
     private static List<Document> parseTrainingSet(String collectionPath) {
