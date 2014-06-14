@@ -14,6 +14,10 @@ public class Sentence {
         this.tokenList.add(token);
     }
 
+    public List<Token> getTokenList() {
+        return tokenList;
+    }
+
     @Override
     public String toString(){
         return tokenList.toString();

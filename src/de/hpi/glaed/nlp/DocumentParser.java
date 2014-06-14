@@ -84,7 +84,7 @@ public class DocumentParser{
             if (event.isStartElement()) {
                 if(event.asStartElement().getName().getLocalPart().equals("sentence")){
 
-                    parseSentence();
+                    doc.add(parseSentence());
                 }
             }
         }
