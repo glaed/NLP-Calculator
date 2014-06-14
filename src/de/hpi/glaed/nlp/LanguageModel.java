@@ -40,8 +40,10 @@ public class LanguageModel {
     }
 
     public void printProbabilities(){
-        for(Map.Entry entry : sortProbabilitiesByCount(probabilities).entrySet()){
-            System.out.println(entry.getValue() + " " + entry.getKey());
+        for(Map.Entry<Bigram, Integer> entry : sortProbabilitiesByCount(probabilities).entrySet()){
+            if(entry.getValue() > 2){
+                System.out.println(entry.getValue() + " " + entry.getKey());
+            }
         }
     }
 
