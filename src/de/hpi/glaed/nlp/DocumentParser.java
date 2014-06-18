@@ -6,6 +6,8 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.XMLEvent;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class DocumentParser{
@@ -53,7 +55,7 @@ public class DocumentParser{
         System.out.println(config.getTestSetSize());
         System.out.println(config.getTrainingSetSize());
 
-        //Collections.shuffle(Arrays.asList(files)); //todo: test calculation with randomized sets
+        Collections.shuffle(Arrays.asList(files));
 
         for(int i=0; i<config.getTestSetSize(); i++){
             currentTestSet[i] = files[i];
@@ -93,6 +95,7 @@ public class DocumentParser{
 
     private Sentence parseSentence() throws XMLStreamException {
         Sentence sentence = new Sentence();
+        sentence.addStartSymbol();
 
         while(eventReader.hasNext()){
             XMLEvent event = eventReader.nextEvent();
@@ -112,6 +115,7 @@ public class DocumentParser{
             }
 
         }
+        sentence.addStopSymbol();
         return sentence;
     }
 

@@ -23,4 +23,14 @@ public class Sentence {
     public String toString(){
         return tokenList.toString();
     }
+
+    public void addStartSymbol() {
+        assert(tokenList.isEmpty());
+        tokenList.add(new Token("<START>", "<posSTART>"));
+    }
+
+    public void addStopSymbol(){
+        assert(tokenList.size() > 0);
+        tokenList.add(new Token("<STOP>", "<posSTOP>"));
+    }
 }

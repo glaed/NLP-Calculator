@@ -7,25 +7,24 @@ public class LanguageModel {
     private HashMap<Bigram, Integer> bigramOccurrences = new HashMap<Bigram, Integer>();
     private HashMap<String, Integer> unigramOccurrences = new HashMap<String, Integer>();
 
-    public void buildLanguageModel(List<Document> trainingCorpus){
+    public void buildFrom(List<Document> trainingCorpus){
 
         for (Document doc : trainingCorpus){
 
             for (Sentence sentence : doc.sentences){
-                String lastWord = "<START>";
+                String lastWord = null;
                 String currentWord = "";
-
-                addUnigramOccurrence("<Start>");
 
                 for (Token token : sentence.getTokenList()) {
                     currentWord = token.tokenName;
 
                     addUnigramOccurrence(currentWord);
-                    addBigramOccurrence(lastWord, currentWord);
+
+                    if (lastWord != null){
+                        addBigramOccurrence(lastWord, currentWord);
+                    }
                     lastWord = currentWord;
                 }
-                addUnigramOccurrence("<STOP>");
-                addBigramOccurrence(lastWord, "<STOP>");
             }
         }
     }
@@ -42,20 +41,24 @@ public class LanguageModel {
         unigramOccurrences.put(word, count + 1);
     }
 
-    private double getSentenceProbability(Sentence sentence){
+    public double getSentenceLogProbability(Sentence sentence){
         double probability = 1.0;
 
-        String lastWord = "<START>";
+        String lastWord = null;
         String currentWord = "";
 
         for (Token token : sentence.getTokenList()){
             currentWord = token.tokenName;
-            probability *= getBigramProbability(new Bigram(lastWord, currentWord));
+
+            if (lastWord != null) {
+                //the log of a product is the sum of the logs
+                probability += getBigramLogProbability(new Bigram(lastWord, currentWord));
+            }
 
             lastWord = currentWord;
         }
-        probability *= getBigramProbability(new Bigram(lastWord, "<STOP>"));
         assert(probability > 0);
+        assert(probability < 1.0);
 
         return probability;
     }
@@ -70,9 +73,24 @@ public class LanguageModel {
         return probability;
     }
 
+    private double getBigramLogProbability(Bigram bigram){
+        double bigramCount = bigramOccurrences.getOrDefault(bigram, 0);
+        double baseCount = unigramOccurrences.getOrDefault(bigram.getFirst(), 0);
+
+        //the log of a division is the difference of the logs
+        double probability = log2(bigramCount + 1) - log2(baseCount + unigramOccurrences.size());
+        assert(probability > 0);
+
+        return probability;
+    }
+
+    private double log2(double x){
+        return Math.log(x)/Math.log(2);
+    }
+
     public void printBigramOccurrences(){
         for(Map.Entry<Bigram, Integer> entry : sortBigramOccurrencesByCount(bigramOccurrences).entrySet()){
-            if(entry.getValue() > 2){
+            if(entry.getValue() > 10){
                 System.out.println(entry.getValue() + " " + entry.getKey());
             }
         }
