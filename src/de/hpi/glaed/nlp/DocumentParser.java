@@ -51,9 +51,9 @@ public class DocumentParser{
         currentTestSet = new File[config.getTestSetSize()];
         currentTrainingSet = new File[config.getTrainingSetSize()];
 
-        System.out.println(files.length);
-        System.out.println(config.getTestSetSize());
-        System.out.println(config.getTrainingSetSize());
+        System.out.println("Files in Corpus: " + files.length);
+        System.out.println("Test set size: " + config.getTestSetSize());
+        System.out.println("Training set size: " + config.getTrainingSetSize());
 
         Collections.shuffle(Arrays.asList(files));
 
@@ -63,8 +63,6 @@ public class DocumentParser{
         for(int i=0; i<config.getTrainingSetSize(); i++){
             currentTrainingSet[i] = files[i+config.getTestSetSize()];
         }
-        System.out.println(currentTestSet[config.getTestSetSize()-1]);
-        System.out.println(currentTrainingSet[config.getTrainingSetSize()-1]);
     }
 
     private FilenameFilter createXMLFilter() {

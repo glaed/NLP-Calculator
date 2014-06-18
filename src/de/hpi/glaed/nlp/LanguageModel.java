@@ -89,8 +89,11 @@ public class LanguageModel {
     }
 
     public void printBigramOccurrences(){
+        int limit = 10;
+        System.out.println();
+        System.out.println(String.format("Bigram occurrences in training set (>%s):", limit));
         for(Map.Entry<Bigram, Integer> entry : sortBigramOccurrencesByCount(bigramOccurrences).entrySet()){
-            if(entry.getValue() > 10){
+            if(entry.getValue() > limit){
                 System.out.println(entry.getValue() + " " + entry.getKey());
             }
         }
